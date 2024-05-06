@@ -6,6 +6,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import dayjs from 'dayjs'
 import { Button } from 'react-bootstrap';
 
+
 export default function Trainings() {
 const [trainings, setTrainings] = useState([])
 
@@ -20,10 +21,10 @@ const [trainings, setTrainings] = useState([])
         .then(data => setTrainings(data))
     }
 
-    const deletetraining = (link) => {
-        console.log("Link:", link);
+    
+    const deletetraining = (id) => {
         if (window.confirm('Are you sure?')) {
-            fetch(link, {
+            fetch(`https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings/${id}`, {
                 method: 'DELETE'
             })
             .then(res => fetchtrainings())
@@ -39,8 +40,8 @@ const [trainings, setTrainings] = useState([])
         { headerName: 'Customer', filter: true,
             valueGetter: (params) => params.data.customer ? `${params.data.customer.firstname} ${params.data.customer.lastname}` : 'ei löydy',
         },
-        { headerName: "", field: "_links.self.href", filter: false, sortable: false, width: 150,
-        cellRenderer: row => <Button color='warning' onClick={() => deletetraining(row.value)}>Delete</Button>}
+        { headerName: "", field: "id", filter: false, sortable: false, width: 150,
+        cellRenderer: params => (<Button color='warning' onClick={() => deletetraining(params.data.id)}>Delete</Button>)},
     ]
 
     return (
